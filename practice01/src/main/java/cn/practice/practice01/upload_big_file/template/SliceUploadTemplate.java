@@ -17,6 +17,7 @@ import java.util.Map;
 
 @Slf4j
 public abstract class SliceUploadTemplate implements SliceUploadStrategy {
+    private int count = 0;
 
     public abstract boolean upload(FileUploadRequest param);
 
@@ -72,6 +73,9 @@ public abstract class SliceUploadTemplate implements SliceUploadStrategy {
             //completeList 检查是否全部完成,如果数组里是否全部都是127(全部分片都成功上传)
             byte[] completeList = FileUtils.readFileToByteArray(confFile);
             isComplete = Byte.MAX_VALUE;
+//            if(param.getChunk() % 8 == 0){
+//                Thread.sleep(1000);
+//            }
             for (int i = 0; i < completeList.length && isComplete == Byte.MAX_VALUE; i++) {
                 //与运算, 如果有部分没有完成则 isComplete 不是 Byte.MAX_VALUE
                 isComplete = (byte) (isComplete & completeList[i]);
@@ -80,6 +84,8 @@ public abstract class SliceUploadTemplate implements SliceUploadStrategy {
 
         } catch (IOException e) {
             log.error(e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             FileUtil.close(accessConfFile);
         }

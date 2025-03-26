@@ -20,7 +20,7 @@ import java.util.Objects;
 public class MappedByteBufferUploadStrategy extends SliceUploadTemplate {
 
   @Autowired
-  private FilePathUtil filePathUtil;
+  public FilePathUtil filePathUtil;
 
   @Value("${upload.chunkSize}")
   private long defaultChunkSize;

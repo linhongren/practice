@@ -2,7 +2,6 @@ package cn.practice.practice01.upload_big_file.callable;
 
 
 
-
 import cn.practice.practice01.upload_big_file.context.UploadContext;
 import cn.practice.practice01.upload_big_file.enu.UploadModeEnum;
 import cn.practice.practice01.upload_big_file.po.FileUpload;
@@ -25,7 +24,9 @@ public class FileCallable implements Callable<FileUpload> {
 
   @Override
   public FileUpload call() throws Exception {
+    System.out.println("333333");
 
+//    FileUpload fileUploadDTO = UploadContext.INSTANCE.getInstance(mode).sliceUpload(param);
     FileUpload fileUploadDTO = UploadContext.INSTANCE.getInstance(mode).sliceUpload(param);
     return fileUploadDTO;
   }

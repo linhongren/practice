@@ -1,6 +1,5 @@
 package cn.practice.practice01.upload_big_file.service.impl;
 
-
 import cn.practice.practice01.upload_big_file.callable.FileCallable;
 import cn.practice.practice01.upload_big_file.constant.FileConstant;
 import cn.practice.practice01.upload_big_file.enu.FileCheckMd5Status;
@@ -55,7 +54,7 @@ public class FileServiceImpl implements FileService {
         if (Objects.isNull(param.getFile())) {
             throw new RuntimeException("file can not be empty");
         }
-        param.setPath(FileUtil.withoutHeadAndTailDiagonal(param.getPath()));
+//        param.setPath(FileUtil.withoutHeadAndTailDiagonal(param.getPath()));
         String md5 = FileMD5Util.getFileMD5(param.getFile());
         param.setMd5(md5);
 
@@ -81,7 +80,9 @@ public class FileServiceImpl implements FileService {
         try {
             completionService.submit(new FileCallable(UploadModeEnum.RANDOM_ACCESS, fileUploadRequestDTO));
 
-            FileUpload fileUploadDTO = completionService.take().get();
+//            FileUpload fileUploadDTO = completionService.take().get();
+            Future<FileUpload> future = completionService.take();
+            FileUpload fileUploadDTO = future.get();
             return fileUploadDTO;
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
@@ -89,6 +90,9 @@ public class FileServiceImpl implements FileService {
         } catch (ExecutionException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e.getMessage());
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
         }
     }
 

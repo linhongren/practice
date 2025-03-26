@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Controller
-@RequestMapping(value = "/")
+@RequestMapping(value = "/index")
 @Slf4j
 public class FileController {
 
@@ -51,9 +51,11 @@ public class FileController {
     }
 
 
-    @PostMapping(value = "/upload")
+    @PostMapping(value = "/fileUpload")
     @ResponseBody
     public Result<FileUpload> upload(FileUploadRequest fileUploadRequestDTO) throws IOException {
+        fileUploadRequestDTO.setPath("\\");
+
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         FileUpload fileUploadDTO = null;
@@ -79,7 +81,7 @@ public class FileController {
     @RequestMapping(value = "checkFileMd5", method = RequestMethod.POST)
     @ResponseBody
     public Result<FileUpload> checkFileMd5(String md5, String path) throws IOException {
-
+        path = "\\";
         FileUploadRequest param = new FileUploadRequest().setPath(path).setMd5(md5);
         FileUpload fileUploadDTO = fileService.checkFileMd5(param);
 
